@@ -1,9 +1,25 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import apiRequest from '../utils/api';
 
 const Register = () => {
-  const handleSubmit = (e) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle registration logic here
+    try {
+      const data = await apiRequest('/users/register', 'POST', { name, email, password });
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify({ name, email })); // Store user data
+      navigate('/search');
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -15,15 +31,18 @@ const Register = () => {
             <p className="mt-4 text-gray-400">Create your account to explore a universe of books.</p>
           </div>
           <div className="w-full max-w-sm bg-gray-700 rounded-lg shadow-lg p-6">
+            {error && <p className="text-red-400 mb-4">{error}</p>}
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block text-gray-300 mb-2" htmlFor="username">
-                  Username
+                <label className="block text-gray-300 mb-2" htmlFor="name">
+                  Name
                 </label>
                 <input
                   type="text"
-                  id="username"
-                  placeholder="username"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="name"
                   className="w-full px-4 py-2 bg-gray-600 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   required
                 />
@@ -35,6 +54,8 @@ const Register = () => {
                 <input
                   type="email"
                   id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="email"
                   className="w-full px-4 py-2 bg-gray-600 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   required
@@ -47,6 +68,8 @@ const Register = () => {
                 <input
                   type="password"
                   id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="password"
                   className="w-full px-4 py-2 bg-gray-600 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   required

@@ -5,6 +5,8 @@ import BookSearch from './pages/BookSearch';
 import BorrowBook from './pages/BorrowBook';
 import ReturnBook from './pages/ReturnBook';
 import ReserveBook from './pages/ReserveBook';
+import LoanHistory from './pages/LoanHistory';
+import MyReservations from './pages/MyReservations';
 
 function App() {
   return (
@@ -16,7 +18,9 @@ function App() {
         <Route path="/borrow" element={<BorrowBook />} />
         <Route path="/return" element={<ReturnBook />} />
         <Route path="/reserve" element={<ReserveBook />} />
-        <Route path="/" element={<BookSearch />} /> {/* Default route */}
+        <Route path="/loan-history" element={<LoanHistory />} />
+        <Route path="/my-reservations" element={<MyReservations />} />
+        <Route path="/" element={<BookSearch />} />
       </Routes>
     </Router>
   );
