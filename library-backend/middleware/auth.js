@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const jwtSecret = process.env.JWT_SECRET || 'test_jwt_secret';
 
 const auth = (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -7,7 +8,7 @@ const auth = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, jwtSecret);
     req.user = decoded; // Add user data to request
     next();
   } catch (error) {

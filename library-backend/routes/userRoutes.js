@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const jwtSecret = process.env.JWT_SECRET || 'test_jwt_secret';
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -29,7 +30,7 @@ router.post('/register', async (req, res) => {
     await user.save();
 
     // Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: '1h' });
 
     res.status(201).json({ token, user: { id: user._id, name, email } });
   } catch (error) {
@@ -55,7 +56,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: '1h' });
 
     res.json({ token, user: { id: user._id, name: user.name, email } });
   } catch (error) {
